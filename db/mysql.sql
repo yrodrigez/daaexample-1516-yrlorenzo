@@ -13,4 +13,15 @@ CREATE TABLE `daaexample`.`users` (
 	PRIMARY KEY (`login`)
 );
 
+CREATE TABLE `daaexample`.`pets`(
+	`id` int NOT NULL AUTO_INCREMENT,
+	`people_id` int NOT NULL,
+	`name` varchar(10) DEFAULT NOT NULL,
+	`breed` varchar(20) DEFAULT NULL,
+	`animal` varchar(30) DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	KEY `people_id` (`people_id`),
+	FOREIGN KEY (`people_id`) REFERENCES `daaexample`.`people`(`id`)
+);
+
 GRANT ALL ON `daaexample`.* TO 'daa'@'localhost' IDENTIFIED BY 'daa';
