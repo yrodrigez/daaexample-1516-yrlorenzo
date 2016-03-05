@@ -9,7 +9,7 @@ var peopleListQuery = '#' + peopleListId;
 
 function insertPeopleList(parent) {
 	parent.append(
-		'<table id="' + peopleListId + '">\
+		'<table class="rwd-table" id="' + peopleListId + '">\
 			<tr>\
 				<th>Nombre</th>\
 				<th>Apellido</th>\
@@ -36,37 +36,18 @@ function deletePetsForm(){
 	$("form#" + petsFormId).remove();
 }
 
-function insertPetsForm() {
-	$("div").append(
-		'<form id="' + petsFormId + '">\
-			<input name="id" type="hidden" value=""/>\
-			Nombre: <input name="name" type="text" value="" />\
-			Raza: <input name="breed" type="text" value="" />\
-			Animal: <input name="animal" type="text" value="" />\
-			Dueño: <select name="owner">\
-			'+createPeopleOptions()+'\
-			</select>\
-			<input id="btnSubmit" type="submit" value="Crear"/>\
-			<input id="btnClear" type="reset" value="Limpiar"/>\
-		</form>'
-	)
-}
+
 
 function createPeopleOptions(){
-	var options;
-	$.getScript("/js/dao/people", function () {
-		listPeople(function (people) {
-			$.each(people, function (key, person) {
-				options.append(createPersonOption(person));
-			});
-			return options;
+	listPeople(function (people) {
+		$.each(people, function (key, person) {
+			$("select#owners").append(
+				'<option value="'+person.id+'">'+person.name+'</option>'
+			);
 		});
 	});
 }
 
-function createPersonOption(person){
-	return '<option value="'+person.id+'">'+person.name+'</option>';
-}
 
 function createPersonRow(person) {
 	return '<tr id="person-'+ person.id +'">\
@@ -113,6 +94,9 @@ function rowToPerson(id) {
 function isEditing() {
 	return $(peopleFormQuery + ' input[name="id"]').val() != "";
 }
+function isEditingPet(){
+	return $(petsFormQuery + ' input[name="petId"]').val() != "";
+}
 
 function disableForm() {
 	$(peopleFormQuery + ' input').prop('disabled', true);
@@ -127,6 +111,11 @@ function resetForm() {
 	$(peopleFormQuery + ' input[name="id"]').val('');
 	$('#btnSubmit').val('Crear');
 }
+function resetPetForm() {
+	$(petsFormQuery)[0].reset();
+	$(petsFormQuery + ' input[name="petId"]').val('');
+	$('#petBtnSubmit').val('Crear');
+}
 
 function showErrorMessage(jqxhr, textStatus, error) {
 	alert(textStatus + ": " + error);
@@ -137,7 +126,7 @@ function addRowListeners(person) {
 		personToForm(rowToPerson(person.id));
 		$('input#btnSubmit').val('Modificar');
 	});
-	
+
 	$('#person-' + person.id + ' a.delete').click(function() {
 		if (confirm('Está a punto de eliminar a una persona. ¿Está seguro de que desea continuar?')) {
 			deletePerson(person.id,
@@ -165,23 +154,94 @@ function addPetRowListener (pet){
 			);
 		}
 	});
+
+	$('#pet-' + pet.id + ' a.editPet').click(function() {
+		petToForm(pet);
+		$('input#petBtnSubmit').val('Modificar');
+	});
 }
+
+function insertPetsForm() {
+	$("body").append(
+		'<form id="' + petsFormId + '">\
+			<input name="petId" type="hidden" value=""/>\
+			Nombre: <input name="petName" type="text" value="" />\
+			Raza: <input name="breed" type="text" value="" />\
+			Animal: <input name="animal" type="text" value="" />\
+			Dueño: <select name="ownerId" id="owners"></select>\
+			<input id="petBtnSubmit" type="submit" value="Crear"/>\
+			<input id="btnClear" type="reset" value="Limpiar"/>\
+		</form>'
+	);
+	createPeopleOptions();
+}
+function petToForm(pet){
+	var form = $(petsFormQuery);
+	form.find('input[name="petId"]').val(pet.id);
+	form.find('input[name="petName"]').val(pet.name);
+	form.find('input[name="breed"]').val(pet.breed);
+	form.find('input[name="animal"]').val(pet.animal);
+	form.find('select[name="ownerId"]').val(pet.ownerId);
+}
+
+function formToPet(){
+	var form = $(petsFormQuery);
+	/*alert(form.find('input[name=petId]').val());
+	alert(form.find('input[name=petName]').val());
+	alert(form.find('input[name=breed]').val());
+	alert(form.find('input[name=animal]').val());
+	alert(form.find('select[name="ownerId"]').val());*/
+	return {
+		'id': form.find('input[name=petId]').val(),
+		'name': form.find('input[name=petName]').val(),
+		'breed': form.find('input[name=breed]').val(),
+		'animal': form.find('input[name=animal]').val(),
+		'ownerId': form.find('select[name="ownerId"]').val()
+	};
+}
+
 
 function showPersonsPets(person){
 	$.getScript('js/dao/pets.js',function() {
 		listPersonsPets(person.id, function (pets) {
 			deletePetsTable();
-			deletePetsForm();
 			createPetsTable(person.name);
-			insertPetsForm();
 			$.each(pets, function (key, pet) {
-				addPet(pet);
+				addPetToTable(pet);
 			});
 		});
-	});
 
+		$(petsFormQuery).submit(function(event) {
+			var pet = formToPet();
+			if (isEditingPet()) {
+				modifyPet(pet,
+					function(pet) {
+						$('#pet-' + pet.id + ' td.name').text(pet.name);
+						$('#pet-' + pet.id + ' td.breed').text(pet.breed);
+						$('#pet-' + pet.id + ' td.animal').text(pet.animal);
+						resetPetForm();
+					},
+					showErrorMessage,
+					enableForm
+				);
+			} else {
+				addPet(pet,
+					function(pet){
+						alert("adding pet!");
+						$('#pet-' + pet.id + ' td.name').text(pet.name);
+						$('#pet-' + pet.id + ' td.breed').text(pet.breed);
+						$('#pet-' + pet.id + ' td.animal').text(pet.animal);
+						resetPetForm();
+					},
+					showErrorMessage,
+					enableForm
+				);
+			}
+			return false;
+		});
+	});
 }
-function addPet(pet){
+function addPetToTable(pet){
 	$(petsTableQuery  + ' > tbody:last').append(petToRow(pet));
 	addPetRowListener(pet);
 }
@@ -191,6 +251,7 @@ function petToRow(pet){
 		<td class="name">' + pet.name + '</td>\
 		<td class="breed">' + pet.breed + '</td>\
 		<td class="animal">' + pet.animal + '</td>\
+		<input id="ownerId" type="hidden" value="'+pet.ownerId+'">\
 		<td>\
 			<a class="editPet" href="#">Edit</a>\
 		</td>\
@@ -206,7 +267,7 @@ function deletePetsTable(){
 
 function createPetsTable(owner){
 	$('div').append(
-		'<table id="' + petsTable + '">\
+		'<table class="rwd-table" id="' + petsTable + '">\
 		<tr class="owner">\
 			<th>Mascotas de: '+owner+'</th>\
 			<th></th>\
@@ -231,6 +292,8 @@ function appendToTable(person) {
 	addRowListeners(person);
 }
 
+
+
 function initPeople() {
 	// getScript permite importar otro script. En este caso, se importan las
 	// funciones de acceso a datos.
@@ -240,12 +303,12 @@ function initPeople() {
 				appendToTable(person);
 			});
 		});
-		
+
 		// La acción por defecto de enviar formulario (submit) se sobreescribe
 		// para que el envío sea a través de AJAX
 		$(peopleFormQuery).submit(function(event) {
 			var person = formToPerson();
-			
+
 			if (isEditing()) {
 				modifyPerson(person,
 					function(person) {
@@ -266,10 +329,11 @@ function initPeople() {
 					enableForm
 				);
 			}
-			
+
 			return false;
 		});
-		
+
+		insertPetsForm();
 		$('#btnClear').click(resetForm);
 	});
 }

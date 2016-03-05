@@ -25,8 +25,8 @@ public class Pet {
        int id,
        String name,
        String breed,
-       int ownerId,
-       String animal
+       String animal,
+       int ownerId
     ){
         this.id = id;
         this.ownerId = ownerId;

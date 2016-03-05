@@ -75,24 +75,26 @@ public class PetsResource {
         }
     }
 
-/**
+
     @POST
     public Response add(
-            @FormParam("name") String name,
-            @FormParam("surname") String surname
+            @FormParam("petName") String name,
+            @FormParam("breed") String breed,
+            @FormParam("animal") String animal,
+            @FormParam("ownerId") int ownerId
     ) {
         try {
-            final Person newPerson = this.dao.add(name, surname);
-
-            return Response.ok(newPerson).build();
+            Pet newPet = new Pet(0, name, breed,animal, ownerId);
+            newPet = this.dao.add(newPet);
+            return Response.ok(newPet).build();
         } catch (IllegalArgumentException iae) {
-            LOG.log(Level.FINE, "Invalid person id in add method", iae);
+            LOG.log(Level.FINE, "Invalid pet id in add method", iae);
 
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(iae.getMessage())
                     .build();
         } catch (DAOException e) {
-            LOG.log(Level.SEVERE, "Error adding a person", e);
+            LOG.log(Level.SEVERE, "Error adding a this pet " + name+" breed: "+breed, e);
 
             return Response.serverError()
                     .entity(e.getMessage())
@@ -101,19 +103,22 @@ public class PetsResource {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{petId}")
     public Response modify(
-            @PathParam("id") int id,
-            @FormParam("name") String name,
-            @FormParam("surname") String surname
+            @PathParam("petId") int id,
+            @FormParam("petName") String name,
+            @FormParam("breed") String breed,
+            @FormParam("animal") String animal,
+            @FormParam("ownerId") int ownerId
     ) {
         try {
-            final Person modifiedPerson = new Person(id, name, surname);
-            this.dao.modify(modifiedPerson);
+            final Pet pet = new Pet(id, name, breed, animal, ownerId);
+            this.dao.modify(pet);
 
-            return Response.ok(modifiedPerson).build();
+            return Response.ok(pet).build();
         } catch (NullPointerException npe) {
-            final String message = String.format("Invalid data for person (name: %s, surname: %s)", name, surname);
+            final String message = "Invalid data for pet"+" id: "+id+" name: "+name+" breed: "
+                    +breed+" animal: "+animal+" ownerid: "+ownerId;
 
             LOG.log(Level.FINE, message);
 
@@ -121,13 +126,13 @@ public class PetsResource {
                     .entity(message)
                     .build();
         } catch (IllegalArgumentException iae) {
-            LOG.log(Level.FINE, "Invalid person id in modify method", iae);
+            LOG.log(Level.FINE, "Invalid pet id in modify method", iae);
 
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(iae.getMessage())
                     .build();
         } catch (DAOException e) {
-            LOG.log(Level.SEVERE, "Error modifying a person", e);
+            LOG.log(Level.SEVERE, "Error modifying a pet", e);
 
             return Response.serverError()
                     .entity(e.getMessage())
@@ -135,7 +140,6 @@ public class PetsResource {
         }
     }
 
-*/
     @DELETE
     @Path("/{id}")
     public Response delete(

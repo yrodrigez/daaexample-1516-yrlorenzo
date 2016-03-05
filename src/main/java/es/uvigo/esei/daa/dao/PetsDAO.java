@@ -83,7 +83,8 @@ public class PetsDAO extends DAO {
     public Pet add(Pet pet)
             throws DAOException, IllegalArgumentException {
         if (pet.getAnimal() == null || pet.getBreed() == null || pet.getName()==null) {
-            throw new IllegalArgumentException("name, animal or breed can't be null");
+            throw new IllegalArgumentException("name, animal or breed can't be null"
+                    +pet.getName()+pet.getOwnerId()+pet.getBreed()+pet.getBreed());
         }
 
         try (Connection conn = this.getConnection()) {
@@ -111,7 +112,7 @@ public class PetsDAO extends DAO {
                 }
             }
         } catch (SQLException e) {
-            LOG.log(Level.SEVERE, "Error adding a person", e);
+            LOG.log(Level.SEVERE, "Error adding a pet", e);
             throw new DAOException(e);
         }
     }
@@ -120,7 +121,7 @@ public class PetsDAO extends DAO {
     public void modify(Pet pet)
             throws DAOException, IllegalArgumentException {
         if (pet == null) {
-            throw new IllegalArgumentException("person can't be null");
+            throw new IllegalArgumentException("pet can't be null");
         }
 
         try (Connection conn = this.getConnection()) {
@@ -131,6 +132,7 @@ public class PetsDAO extends DAO {
                 statement.setString(2, pet.getBreed());
                 statement.setString(3, pet.getAnimal());
                 statement.setInt(4,pet.getOwnerId());
+                statement.setInt(5,pet.getId());
 
                 if (statement.executeUpdate() != 1) {
                     throw new IllegalArgumentException("name and breed and animal can't be null");
@@ -165,8 +167,8 @@ public class PetsDAO extends DAO {
                 row.getInt("id"),
                 row.getString("name"),
                 row.getString("breed"),
-                row.getInt("owner_id"),
-                row.getString("animal")
+                row.getString("animal"),
+                row.getInt("owner_id")
         );
     }
 }
