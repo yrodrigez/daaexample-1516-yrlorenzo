@@ -76,7 +76,7 @@ public class PeopleDAOTest {
 	}
 
 	@Test
-	@ExpectedDatabase("/datasets/dataset-delete.xml")
+	@ExpectedDatabase("/datasets/people/dataset-delete.xml")
 	public void testDelete() throws DAOException {
 		this.dao.delete(existentId());
 
@@ -89,7 +89,7 @@ public class PeopleDAOTest {
 	}
 
 	@Test
-	@ExpectedDatabase("/datasets/dataset-modify.xml")
+	@ExpectedDatabase("/datasets/people/dataset-modify.xml")
 	public void testModify() throws DAOException {
 		final Person person = existentPerson();
 		person.setName(newName());
@@ -113,7 +113,7 @@ public class PeopleDAOTest {
 	}
 
 	@Test
-	@ExpectedDatabase("/datasets/dataset-add.xml")
+	@ExpectedDatabase("/datasets/people/dataset-add.xml")
 	public void testAdd() throws DAOException {
 		final Person person = this.dao.add(newName(), newSurname());
 		

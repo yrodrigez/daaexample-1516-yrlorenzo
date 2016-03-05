@@ -170,7 +170,7 @@ function insertPetsForm() {
 			Animal: <input name="animal" type="text" value="" />\
 			Dueño: <select name="ownerId" id="owners"></select>\
 			<input id="petBtnSubmit" type="submit" value="Crear"/>\
-			<input id="btnClear" type="reset" value="Limpiar"/>\
+			<input id="petBtnClear" type="reset" value="Limpiar"/>\
 		</form>'
 	);
 	createPeopleOptions();
@@ -186,11 +186,7 @@ function petToForm(pet){
 
 function formToPet(){
 	var form = $(petsFormQuery);
-	/*alert(form.find('input[name=petId]').val());
-	alert(form.find('input[name=petName]').val());
-	alert(form.find('input[name=breed]').val());
-	alert(form.find('input[name=animal]').val());
-	alert(form.find('select[name="ownerId"]').val());*/
+
 	return {
 		'id': form.find('input[name=petId]').val(),
 		'name': form.find('input[name=petName]').val(),
@@ -202,42 +198,11 @@ function formToPet(){
 
 
 function showPersonsPets(person){
-	$.getScript('js/dao/pets.js',function() {
-		listPersonsPets(person.id, function (pets) {
-			deletePetsTable();
-			createPetsTable(person.name);
-			$.each(pets, function (key, pet) {
-				addPetToTable(pet);
-			});
-		});
-
-		$(petsFormQuery).submit(function(event) {
-			var pet = formToPet();
-			if (isEditingPet()) {
-				modifyPet(pet,
-					function(pet) {
-						$('#pet-' + pet.id + ' td.name').text(pet.name);
-						$('#pet-' + pet.id + ' td.breed').text(pet.breed);
-						$('#pet-' + pet.id + ' td.animal').text(pet.animal);
-						resetPetForm();
-					},
-					showErrorMessage,
-					enableForm
-				);
-			} else {
-				addPet(pet,
-					function(pet){
-						alert("adding pet!");
-						$('#pet-' + pet.id + ' td.name').text(pet.name);
-						$('#pet-' + pet.id + ' td.breed').text(pet.breed);
-						$('#pet-' + pet.id + ' td.animal').text(pet.animal);
-						resetPetForm();
-					},
-					showErrorMessage,
-					enableForm
-				);
-			}
-			return false;
+	listPersonsPets(person.id, function (pets) {
+		deletePetsTable();
+		createPetsTable(person.name);
+		$.each(pets, function (key, pet) {
+			addPetToTable(pet);
 		});
 	});
 }
@@ -248,9 +213,9 @@ function addPetToTable(pet){
 
 function petToRow(pet){
 	return '<tr id="pet-'+ pet.id +'">\
-		<td class="name">' + pet.name + '</td>\
-		<td class="breed">' + pet.breed + '</td>\
-		<td class="animal">' + pet.animal + '</td>\
+		<td class="name">'+ pet.name +'</td>\
+		<td class="breed">'+ pet.breed +'</td>\
+		<td class="animal">'+ pet.animal +'</td>\
 		<input id="ownerId" type="hidden" value="'+pet.ownerId+'">\
 		<td>\
 			<a class="editPet" href="#">Edit</a>\
@@ -290,6 +255,41 @@ function appendToTable(person) {
 	$(peopleListQuery + ' > tbody:last')
 		.append(createPersonRow(person));
 	addRowListeners(person);
+}
+
+function initPets() {
+	$.getScript('js/dao/pets.js',function() {
+		$(petsFormQuery).submit(function(event) {
+			var pet = formToPet();
+
+			if (isEditingPet()) {
+				modifyPet(pet,
+				 function(pet) {
+					 $('#pet-' + pet.id + ' td.name').text(pet.name);
+					 $('#pet-' + pet.id + ' td.breed').text(pet.breed);
+					 $('#pet-' + pet.id + ' td.animal').text(pet.animal);
+					 resetPetForm();
+				 },
+				 showErrorMessage,
+				 enableForm
+				 );
+			} else {
+				addPet(pet,
+					function(pet){
+						$('#pet-' + pet.id + ' td.name').text(pet.name);
+					 	$('#pet-' + pet.id + ' td.breed').text(pet.breed);
+					 	$('#pet-' + pet.id + ' td.animal').text(pet.animal);
+					 resetPetForm();
+				 },
+				 showErrorMessage,
+				 enableForm
+				 );
+			}
+			return false;
+		});
+
+		$('#petBtnClear').click(resetPetForm);
+	});
 }
 
 
@@ -334,6 +334,7 @@ function initPeople() {
 		});
 
 		insertPetsForm();
+		initPets();
 		$('#btnClear').click(resetForm);
 	});
 }

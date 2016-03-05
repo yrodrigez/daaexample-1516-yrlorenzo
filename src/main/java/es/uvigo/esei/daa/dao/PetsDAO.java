@@ -83,12 +83,11 @@ public class PetsDAO extends DAO {
     public Pet add(Pet pet)
             throws DAOException, IllegalArgumentException {
         if (pet.getAnimal() == null || pet.getBreed() == null || pet.getName()==null) {
-            throw new IllegalArgumentException("name, animal or breed can't be null"
-                    +pet.getName()+pet.getOwnerId()+pet.getBreed()+pet.getBreed());
+            throw new IllegalArgumentException("name, animal or breed can't be null");
         }
 
         try (Connection conn = this.getConnection()) {
-            final String query = "INSERT INTO pets (id,owner_id,name,breed, animal ) VALUES (null,?,?,?,?)";
+            final String query = "INSERT INTO pets(id, owner_id, name, breed, animal) VALUES (null,?,?,?,?)";
 
             try (PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setInt(1, pet.getOwnerId());

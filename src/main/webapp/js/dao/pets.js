@@ -35,7 +35,7 @@ function modifyPet(pet, done, fail, always) {
     always = typeof always !== 'undefined' ? always : function() {};
 
     $.ajax({
-            url: 'rest/pet/' + pet.id,
+            url: 'rest/pets/' + pet.id,
             type: 'PUT',
             data: pet
         })
@@ -50,7 +50,7 @@ function addPet(pet, done, fail, always) {
     always = typeof always !== 'undefined' ? always : function() {};
 
     $.ajax({
-            url: 'rest/pet/',
+            url: 'rest/pets',
             type: 'POST',
             data: pet
         })

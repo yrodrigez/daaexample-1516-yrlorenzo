@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<!DOCTYPE dataset SYSTEM "../dataset.dtd">
 
 <dataset>
 	<people id="1" name="Antón" surname="Álvarez" />
@@ -12,7 +12,12 @@
 	<people id="8" name="Patricia" surname="Pérez" />
 	<people id="9" name="Julia" surname="Justa" />
 	<people id="10" name="Juan" surname="Jiménez" />
-	<people id="11" name="John" surname="Doe" />
 
 	<users login="admin" password="0b893644f3b2097d004c58d585e784ac92dd1356d25158a298573ad54ab2d15d" />
+
+	<pets id="1" name="Whisky" breed="Beagle" animal="Dog" owner_id="1" />
+	<pets id="2" name="Perroman" breed="Doberman" animal="Dog" owner_id="4" />
+	<pets id="3" name="unPerro" breed="doberman" animal="perro" owner_id="1" />
+	<pets id="4" name="Perro3" breed="Gray" animal="Rhino" owner_id="2" />
+	<pets id="5" name="Perro3" breed="Gray" animal="Rhino" owner_id="5" />
 </dataset>

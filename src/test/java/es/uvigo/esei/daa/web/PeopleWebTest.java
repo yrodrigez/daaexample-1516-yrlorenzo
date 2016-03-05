@@ -91,7 +91,7 @@ public class PeopleWebTest {
 	}
 
 	@Test
-	@ExpectedDatabase("/datasets/dataset-add.xml")
+	@ExpectedDatabase("/datasets/people/dataset-add.xml")
 	public void testAdd() throws Exception {
 		final Person newPerson = mainPage.addPerson(newName(), newSurname());
 		
@@ -99,7 +99,7 @@ public class PeopleWebTest {
 	}
 
 	@Test
-	@ExpectedDatabase("/datasets/dataset-modify.xml")
+	@ExpectedDatabase("/datasets/people/dataset-modify.xml")
 	public void testEdit() throws Exception {
 		final Person person = existentPerson();
 		person.setName(newName());
@@ -113,7 +113,7 @@ public class PeopleWebTest {
 	}
 
 	@Test
-	@ExpectedDatabase("/datasets/dataset-delete.xml")
+	@ExpectedDatabase("/datasets/people/dataset-delete.xml")
 	public void testDelete() throws Exception {
 		mainPage.deletePerson(existentId());
 		

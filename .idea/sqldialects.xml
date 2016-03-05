@@ -4,5 +4,7 @@
     <file url="file://$PROJECT_DIR$/db/mysql-with-inserts.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/db/mysql.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/es/uvigo/esei/daa/dao/PetsDAO.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/test/resources/db/hsqldb-drop.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/test/resources/db/hsqldb.sql" dialect="GenericSQL" />
   </component>
 </project>

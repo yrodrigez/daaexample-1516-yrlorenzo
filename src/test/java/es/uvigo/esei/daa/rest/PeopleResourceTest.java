@@ -107,7 +107,7 @@ public class PeopleResourceTest extends JerseyTest {
 	}
 
 	@Test
-	@ExpectedDatabase("/datasets/dataset-add.xml")
+	@ExpectedDatabase("/datasets/people/dataset-add.xml")
 	public void testAdd() throws IOException {
 		final Form form = new Form();
 		form.param("name", newName());
@@ -148,7 +148,7 @@ public class PeopleResourceTest extends JerseyTest {
 	}
 
 	@Test
-	@ExpectedDatabase("/datasets/dataset-modify.xml")
+	@ExpectedDatabase("/datasets/people/dataset-modify.xml")
 	public void testModify() throws IOException {
 		final Form form = new Form();
 		form.param("name", newName());
@@ -206,7 +206,7 @@ public class PeopleResourceTest extends JerseyTest {
 	}
 
 	@Test
-	@ExpectedDatabase("/datasets/dataset-delete.xml")
+	@ExpectedDatabase("/datasets/people/dataset-delete.xml")
 	public void testDelete() throws IOException {
 		final Response response = target("people/" + existentId()).request().delete();
 		

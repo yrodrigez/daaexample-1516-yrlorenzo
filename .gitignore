@@ -1,6 +1,9 @@
 # General
 /bak
 
+#idea
+.idea
+
 # Eclipse
 .project
 .classpath
