@@ -28,11 +28,11 @@ public class Pet {
        String animal,
        int ownerId
     ){
-        this.id = id;
-        this.ownerId = ownerId;
-        this.breed = breed;
-        this.name = name;
-        this.animal = animal;
+        this.setId(id);
+        this.setOwnerId(ownerId);
+        this.setBreed(breed);
+        this.setName(name);
+        this.setAnimal(animal);
 
     }
 
