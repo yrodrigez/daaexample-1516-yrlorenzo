@@ -67,11 +67,16 @@ public class PetsDAO extends DAO {
             try(final PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1,personId);
                 try(final ResultSet result = stmt.executeQuery()) {
-                    final List<Pet> pets = new LinkedList<>();
-                    while (result.next()){
+                    if(result.next()) {
+                        final List<Pet> pets = new LinkedList<>();
                         pets.add(rowToEntity(result));
+                        while (result.next()) {
+                            pets.add(rowToEntity(result));
+                        }
+                        return pets;
+                    }else{
+                        throw new IllegalArgumentException("Invalid id");
                     }
-                    return pets;
                 }
             }
         } catch (SQLException e){

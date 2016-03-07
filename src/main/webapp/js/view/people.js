@@ -261,7 +261,7 @@ function initPets() {
 	$.getScript('js/dao/pets.js',function() {
 		$(petsFormQuery).submit(function(event) {
 			var pet = formToPet();
-
+				alert(pet.name);
 			if (isEditingPet()) {
 				modifyPet(pet,
 				 function(pet) {

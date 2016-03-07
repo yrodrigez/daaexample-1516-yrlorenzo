@@ -21,7 +21,6 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 
-import es.uvigo.esei.daa.entities.Person;
 import es.uvigo.esei.daa.listeners.ApplicationContextBinding;
 import es.uvigo.esei.daa.listeners.ApplicationContextJndiBindingTestExecutionListener;
 import es.uvigo.esei.daa.listeners.DbManagement;

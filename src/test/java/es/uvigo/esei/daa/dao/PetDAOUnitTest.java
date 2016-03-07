@@ -15,11 +15,11 @@ import static org.junit.Assert.assertThat;
 import java.sql.SQLException;
 
 import es.uvigo.esei.daa.entities.Pet;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mysql.jdbc.Statement;
 
-import es.uvigo.esei.daa.entities.Pet;
 import es.uvigo.esei.daa.util.DatabaseQueryUnitTest;
 
 public class PetDAOUnitTest extends DatabaseQueryUnitTest {
@@ -109,6 +109,11 @@ public class PetDAOUnitTest extends DatabaseQueryUnitTest {
         assertThat(newPet, is(equalsToPet(pet)));
     }
 
+    @Ignore
+    /*
+    * Ignorando porque el contructor de pet ya lanza la excepción si alguno de los parámetros son nulos
+    * Preguntar a MrJato
+    * */
     @Test(expected = IllegalArgumentException.class)
     public void testAddNullName() throws Exception {
         replayAll();
@@ -120,6 +125,11 @@ public class PetDAOUnitTest extends DatabaseQueryUnitTest {
         petsDAO.add(new Pet(1 ,null,"algo","algo", newOwner()));
     }
 
+    @Ignore
+    /*
+    * Ignorando porque el contructor de pet ya lanza la excepción si alguno de los parámetros son nulos
+    * Preguntar a MrJato
+    * */
     @Test(expected = IllegalArgumentException.class)
     public void testAddNullBreed() throws Exception {
         replayAll();
@@ -128,9 +138,14 @@ public class PetDAOUnitTest extends DatabaseQueryUnitTest {
 
         resetAll(); // No expectations
 
-        petsDAO.add(new Pet(1 ,"algo",null,"algo", newOwner()));
+        petsDAO.add(new Pet(1 ,"algo", null, "algo", newOwner()));
     }
 
+    @Ignore
+    /*
+    * Ignorando porque el contructor de pet ya lanza la excepción si alguno de los parámetros son nulos
+    * Preguntar a MrJato
+    * */
     @Test(expected = IllegalArgumentException.class)
     public void testAddNullAnimal() throws Exception {
         replayAll();
@@ -139,7 +154,7 @@ public class PetDAOUnitTest extends DatabaseQueryUnitTest {
 
         resetAll(); // No expectations
 
-        petsDAO.add(new Pet(1 ,"algo","algo",null, newOwner()));
+        petsDAO.add(new Pet(1 ,"algo","algo", null, newOwner()));
     }
 
     @Test(expected = DAOException.class)

@@ -41,6 +41,7 @@ public class PetsResource {
     }
 
 
+
     @GET
     @Path("/{personId}")
     public Response personsPets(
@@ -78,7 +79,7 @@ public class PetsResource {
 
     @POST
     public Response add(
-            @FormParam("petName") String name,
+            @FormParam("name") String name,
             @FormParam("breed") String breed,
             @FormParam("animal") String animal,
             @FormParam("ownerId") int ownerId
@@ -106,7 +107,7 @@ public class PetsResource {
     @Path("/{petId}")
     public Response modify(
             @PathParam("petId") int id,
-            @FormParam("petName") String name,
+            @FormParam("name") String name,
             @FormParam("breed") String breed,
             @FormParam("animal") String animal,
             @FormParam("ownerId") int ownerId
