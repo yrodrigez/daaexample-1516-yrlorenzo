@@ -7,7 +7,7 @@ function listPersonsPets(personId, done, fail, always) {
     always = typeof always !== 'undefined' ? always : function() {};
 
     $.ajax({
-            url: 'rest/pets/'+personId,
+            url: 'rest/pets/owner/'+personId,
             type: 'GET'
         })
         .done(done)

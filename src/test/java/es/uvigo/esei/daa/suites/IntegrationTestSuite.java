@@ -1,6 +1,7 @@
 package es.uvigo.esei.daa.suites;
 
 import es.uvigo.esei.daa.dao.PetDAOTest;
+import es.uvigo.esei.daa.rest.PetsResourceTest;
 import es.uvigo.esei.daa.rest.PetsResourceUnitTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -13,7 +14,7 @@ import es.uvigo.esei.daa.rest.PeopleResourceTest;
 	PeopleDAOTest.class,
 	PeopleResourceTest.class,
 	PetDAOTest.class,
-	PetsResourceUnitTest.class
+	PetsResourceTest.class
 })
 @RunWith(Suite.class)
 public class IntegrationTestSuite {

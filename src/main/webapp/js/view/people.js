@@ -37,7 +37,6 @@ function deletePetsForm(){
 }
 
 
-
 function createPeopleOptions(){
 	listPeople(function (people) {
 		$.each(people, function (key, person) {

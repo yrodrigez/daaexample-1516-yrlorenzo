@@ -23,8 +23,8 @@ public class IsEqualToPet extends IsEqualToEntity<Pet> {
             return checkAttribute("id", Pet::getId, actual)
                     && checkAttribute("name", Pet::getName, actual)
                     && checkAttribute("breed", Pet::getBreed, actual)
-                    &&checkAttribute("animal", Pet::getAnimal,actual)
-                    &&checkAttribute("ownerId", Pet::getOwnerId, actual);
+                    && checkAttribute("animal", Pet::getAnimal,actual)
+                    && checkAttribute("ownerId", Pet::getOwnerId, actual);
         }
     }
     @Factory

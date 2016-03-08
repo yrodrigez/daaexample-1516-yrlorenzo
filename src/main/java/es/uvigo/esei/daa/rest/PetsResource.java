@@ -40,10 +40,34 @@ public class PetsResource {
         this.dao = dao;
     }
 
+    @GET
+    @Path("/{id}")
+    public Response get(
+            @PathParam("id") int id
+    ) {
+        try {
+            final Pet pet = this.dao.get(id);
+
+            return Response.ok(pet).build();
+        } catch (IllegalArgumentException iae) {
+            LOG.log(Level.FINE, "Invalid person id in get method", iae);
+
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(iae.getMessage())
+                    .build();
+        } catch (DAOException e) {
+            LOG.log(Level.SEVERE, "Error getting a person", e);
+
+            return Response.serverError()
+                    .entity(e.getMessage())
+                    .build();
+        }
+    }
+
 
 
     @GET
-    @Path("/{personId}")
+    @Path("/owner/{personId}")
     public Response personsPets(
             @PathParam("personId") int id
     ) {
@@ -88,7 +112,7 @@ public class PetsResource {
             Pet newPet = new Pet(0, name, breed,animal, ownerId);
             newPet = this.dao.add(newPet);
             return Response.ok(newPet).build();
-        } catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException | NullPointerException iae) {
             LOG.log(Level.FINE, "Invalid pet id in add method", iae);
 
             return Response.status(Response.Status.BAD_REQUEST)

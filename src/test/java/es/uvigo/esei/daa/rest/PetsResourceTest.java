@@ -1,14 +1,6 @@
 package es.uvigo.esei.daa.rest;
 
-        import static es.uvigo.esei.daa.dataset.PetsDataset.existentId;
-        import static es.uvigo.esei.daa.dataset.PetsDataset.existentPet;
-        import static es.uvigo.esei.daa.dataset.PetsDataset.newName;
-        import static es.uvigo.esei.daa.dataset.PetsDataset.newPet;
-        import static es.uvigo.esei.daa.dataset.PetsDataset.newBreed;
-        import static es.uvigo.esei.daa.dataset.PetsDataset.newAnimal;
-        import static es.uvigo.esei.daa.dataset.PetsDataset.newOwner;
-        import static es.uvigo.esei.daa.dataset.PetsDataset.nonExistentId;
-        import static es.uvigo.esei.daa.dataset.PetsDataset.pets;
+        import static es.uvigo.esei.daa.dataset.PetsDataset.*;
         import static es.uvigo.esei.daa.matchers.HasHttpStatus.hasBadRequestStatus;
         import static es.uvigo.esei.daa.matchers.HasHttpStatus.hasOkStatus;
         import static es.uvigo.esei.daa.matchers.IsEqualToPet.containsPetsInAnyOrder;
@@ -29,6 +21,7 @@ package es.uvigo.esei.daa.rest;
         import javax.ws.rs.core.MediaType;
         import javax.ws.rs.core.Response;
 
+        import es.uvigo.esei.daa.dataset.PeopleDataset;
         import org.glassfish.jersey.client.ClientConfig;
         import org.glassfish.jersey.test.JerseyTest;
         import org.junit.Test;
@@ -178,10 +171,10 @@ public class PetsResourceTest extends JerseyTest {
     @ExpectedDatabase("/datasets/pets/dataset-modify.xml")
     public void testModify() throws IOException {
         final Form form = new Form();
-        form.param("name", newName());
-        form.param("breed", newBreed());
-        form.param("animal", newAnimal());
-        form.param("ownerId", String.valueOf(newOwner()));
+        form.param("name", newName());// unrino
+        form.param("breed", newBreed());//gray
+        form.param("animal", newAnimal());//rhino
+        form.param("ownerId", String.valueOf(newOwner()));//1
 
         final Response response = target("pets/" + existentId())
                 .request(MediaType.APPLICATION_JSON_TYPE)
@@ -193,6 +186,7 @@ public class PetsResourceTest extends JerseyTest {
         final Pet pet = existentPet();
         pet.setName(newName());
         pet.setBreed(newBreed());
+        pet.setAnimal(newAnimal());
 
         assertThat(modifiedPet, is(equalsToPet(pet)));
     }
@@ -265,5 +259,25 @@ public class PetsResourceTest extends JerseyTest {
         final Response response = target("pets/" + nonExistentId()).request().delete();
 
         assertThat(response, hasBadRequestStatus());
+    }
+
+    @Test
+    public void testPersonsPets() throws IOException {
+        final Response response = target("pets/owner/"+ PeopleDataset.existentId()).request().get();
+        assertThat(response, hasOkStatus());
+
+        final List<Pet> pets = response.readEntity(new GenericType<List<Pet>>(){});
+
+        assertThat(pets, containsPetsInAnyOrder(personsPets()));
+    }
+
+    @Test
+    public void testPersonsPetsInvalidId() throws IOException {
+        final Response response = target("pets/owner/"+ PeopleDataset.nonExistentId()).request().get();
+        assertThat(response, hasOkStatus());
+
+        final List<Pet> pets = response.readEntity(new GenericType<List<Pet>>(){});
+
+        assertThat(pets, containsPetsInAnyOrder(emptyPetsCollection()));
     }
 }

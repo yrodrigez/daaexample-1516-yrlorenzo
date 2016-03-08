@@ -62,21 +62,16 @@ public class PetsDAO extends DAO {
 
     public List<Pet> personsPets(int personId) throws DAOException {
         try(final Connection conn = this.getConnection()){
-            final String query = "SELECT pets.* FROM pets, people WHERE people.id= ? AND people.id=pets.owner_id";
+            final String query = "SELECT pets.* FROM pets WHERE pets.owner_id= ?";
 
             try(final PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1,personId);
                 try(final ResultSet result = stmt.executeQuery()) {
-                    if(result.next()) {
-                        final List<Pet> pets = new LinkedList<>();
+                    final List<Pet> pets = new LinkedList<>();
+                    while (result.next()) {
                         pets.add(rowToEntity(result));
-                        while (result.next()) {
-                            pets.add(rowToEntity(result));
-                        }
-                        return pets;
-                    }else{
-                        throw new IllegalArgumentException("Invalid id");
                     }
+                    return pets;
                 }
             }
         } catch (SQLException e){
@@ -87,8 +82,8 @@ public class PetsDAO extends DAO {
 
     public Pet add(Pet pet)
             throws DAOException, IllegalArgumentException {
-        if (pet.getAnimal() == null || pet.getBreed() == null || pet.getName()==null) {
-            throw new IllegalArgumentException("name, animal or breed can't be null");
+        if (pet==null) {
+            throw new IllegalArgumentException("Pet is null!");
         }
 
         try (Connection conn = this.getConnection()) {

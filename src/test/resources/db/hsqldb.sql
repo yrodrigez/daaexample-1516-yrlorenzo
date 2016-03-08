@@ -18,5 +18,5 @@ name varchar(10) DEFAULT NULL,
 breed varchar(20) DEFAULT NULL,
 animal varchar(30) DEFAULT NULL,
 PRIMARY KEY (id),
-CONSTRAINT pets_fk FOREIGN KEY (owner_id) REFERENCES people(id)
+CONSTRAINT pets_fk FOREIGN KEY (owner_id) REFERENCES people(id) ON DELETE CASCADE
 );

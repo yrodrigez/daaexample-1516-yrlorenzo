@@ -45,7 +45,7 @@ public class Pet {
         return id;
     }
 
-    public void setId(int id) { this.id = requireNonNull(id, "id can't be null, you clown!"); }
+    public void setId(int id) { this.id = id; }
 
     /**
      * Returns the name of the pet.

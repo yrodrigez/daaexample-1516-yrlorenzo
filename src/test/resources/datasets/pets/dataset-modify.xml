@@ -17,7 +17,7 @@
 
 	<pets id="1" name="Whisky" breed="Beagle" animal="Dog" owner_id="1" />
 	<pets id="2" name="Perroman" breed="Doberman" animal="Dog" owner_id="4" />
-	<pets id="3" name="unPerro" breed="doberman" animal="perro" owner_id="1" />
+	<pets id="3" name="unrino" breed="gray" animal="rhino" owner_id="1" />
 	<pets id="4" name="Perro3" breed="Gray" animal="Rhino" owner_id="2" />
-	<pets id="5" name="Perro3" breed="Gray" animal="Rhino" owner_id="5" />
+	<pets id="5" name="chacho" breed="carasuc" animal="loro" owner_id="5" />
 </dataset>

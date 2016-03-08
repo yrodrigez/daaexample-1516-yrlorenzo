@@ -9,6 +9,7 @@ import static org.junit.Assert.assertThat;
 
 import javax.sql.DataSource;
 
+import es.uvigo.esei.daa.dataset.PeopleDataset;
 import es.uvigo.esei.daa.entities.Pet;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,6 +58,14 @@ public class PetDAOTest {
     }
 
     @Test
+    public void testPersonsPets() throws DAOException {
+        assertThat(
+                this.dao.personsPets(PeopleDataset.existentId()),
+                containsPetsInAnyOrder(personsPets())
+        );
+    }
+
+    @Test
     public void testGet() throws DAOException {
         final Pet pet = this.dao.get(existentId());
 
@@ -84,11 +93,11 @@ public class PetDAOTest {
     @Test
     @ExpectedDatabase("/datasets/pets/dataset-modify.xml")
     public void testModify() throws DAOException {
-        final Pet pet = existentPet();
-        pet.setName(newName());
-        pet.setAnimal(newAnimal());
-        pet.setBreed(newBreed());
-        pet.setOwnerId(newOwner());
+        final Pet pet = existentPet();// 3
+        pet.setName(newName()); //unrino
+        pet.setAnimal(newAnimal()); //rhino
+        pet.setBreed(newBreed()); //gray
+        pet.setOwnerId(newOwner());// 1
 
         this.dao.modify(pet);
 
@@ -108,7 +117,7 @@ public class PetDAOTest {
     }
 
     @Test
-    @ExpectedDatabase("/datasets/people/dataset-add.xml")
+    @ExpectedDatabase("/datasets/pets/dataset-add.xml")
     public void testAdd() throws DAOException {
         final Pet pet = this.dao.add(newPet());
 
@@ -119,18 +128,10 @@ public class PetDAOTest {
         assertThat(persistentPet, is(equalsToPet(newPet())));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddNullName() throws DAOException {
-        this.dao.add(new Pet(1 ,null,"algo","algo", newOwner()));
-    }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAddNullBreed() throws DAOException {
-        this.dao.add(new Pet(1,"algo",null,"algo", 1));
-    }
-    @Test(expected = IllegalArgumentException.class)
     public void testAddNullAnimal() throws DAOException {
-        this.dao.add(new Pet(1,"algo","algo",null, 1));
+        this.dao.add(null);
     }
 
 }

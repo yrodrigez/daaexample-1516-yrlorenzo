@@ -202,10 +202,9 @@ public class PetsResourceUnitTest {
 
     @Test
     public void testAdd() throws Exception {
-        expect(daoMock.add(newPet()))
+        expect(daoMock.add(new Pet(0, newName(), newBreed(), newAnimal(), newOwner())))
                 .andReturn(newPet());
         replay(daoMock);
-
 
         final Response response = resource.add(
                 newName(), newBreed(), newAnimal(), newOwner()

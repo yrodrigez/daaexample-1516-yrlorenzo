@@ -14,8 +14,8 @@ import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
 
+import es.uvigo.esei.daa.dataset.PeopleDataset;
 import es.uvigo.esei.daa.entities.Pet;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mysql.jdbc.Statement;
@@ -109,52 +109,16 @@ public class PetDAOUnitTest extends DatabaseQueryUnitTest {
         assertThat(newPet, is(equalsToPet(pet)));
     }
 
-    @Ignore
-    /*
-    * Ignorando porque el contructor de pet ya lanza la excepción si alguno de los parámetros son nulos
-    * Preguntar a MrJato
-    * */
+
     @Test(expected = IllegalArgumentException.class)
-    public void testAddNullName() throws Exception {
+    public void testAddNullPet() throws Exception {
         replayAll();
 
         final PetsDAO petsDAO = new PetsDAO();
 
         resetAll(); // No expectations
 
-        petsDAO.add(new Pet(1 ,null,"algo","algo", newOwner()));
-    }
-
-    @Ignore
-    /*
-    * Ignorando porque el contructor de pet ya lanza la excepción si alguno de los parámetros son nulos
-    * Preguntar a MrJato
-    * */
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddNullBreed() throws Exception {
-        replayAll();
-
-        final PetsDAO petsDAO = new PetsDAO();
-
-        resetAll(); // No expectations
-
-        petsDAO.add(new Pet(1 ,"algo", null, "algo", newOwner()));
-    }
-
-    @Ignore
-    /*
-    * Ignorando porque el contructor de pet ya lanza la excepción si alguno de los parámetros son nulos
-    * Preguntar a MrJato
-    * */
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddNullAnimal() throws Exception {
-        replayAll();
-
-        final PetsDAO petsDAO = new PetsDAO();
-
-        resetAll(); // No expectations
-
-        petsDAO.add(new Pet(1 ,"algo","algo", null, newOwner()));
+        petsDAO.add(null);
     }
 
     @Test(expected = DAOException.class)
@@ -280,5 +244,32 @@ public class PetDAOUnitTest extends DatabaseQueryUnitTest {
         expect(result.getString("breed")).andReturn(pet.getBreed());
         expect(result.getString("animal")).andReturn(pet.getAnimal());
         expect(result.getInt("owner_id")).andReturn(pet.getOwnerId());
+    }
+
+    @Test
+    public void testPersonsPets() throws Exception {
+        final Pet[] pets = pets();
+
+        for (Pet pet : pets) {
+            expectPetRow(pet);
+        }
+        expect(result.next()).andReturn(false);
+        result.close();
+
+        replayAll();
+        final PetsDAO petsDAO = new PetsDAO();
+
+        assertThat(petsDAO.personsPets(PeopleDataset.existentId()), containsPetsInAnyOrder(pets));
+    }
+
+    @Test(expected = DAOException.class)
+    public void testPersonsPetsUnexpectedException() throws Exception {
+        expect(result.next()).andThrow(new SQLException());
+        result.close();
+
+        replayAll();
+
+        final PetsDAO petsDAO = new PetsDAO();
+        petsDAO.personsPets(PeopleDataset.existentId());
     }
 }

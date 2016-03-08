@@ -12,14 +12,31 @@ import static java.util.Arrays.stream;
 public class PetsDataset {
     private PetsDataset() {}
 
+    public static Pet[] personsPets() {
+        return new Pet[] {
+                new Pet(
+                        5,
+                        "chacho",
+                        "carasuc",
+                        "loro",
+                        5
+                )
+        };
+    }
+
     public static Pet[] pets() {
         return new Pet[] {
-                new Pet(1, "Whysky", "Beagle", "Dog",1),
-                new Pet(2, "Perroman", "Doberman", "Dog",4),
+                new Pet(1, "Whisky", "Beagle", "Dog", 1),
+                new Pet(2, "Perroman", "Doberman", "Dog", 4),
                 new Pet(3, "Perro2", "Siames", "Cat", 1),
-                new Pet(4, "Perro3", "Gray", "Rhino",2),
-                new Pet(2, "Perro3", "Gray", "Rhino",5)
+                new Pet(4, "Perro3", "Gray", "Rhino", 2),
+                new Pet(5, "chacho", "carasuc", "loro", 5)
         };
+
+    }
+
+    public static Pet[] emptyPetsCollection() {
+        return new Pet[] {} ;
     }
 
     public static Pet[] petsWithout(int ... ids) {
